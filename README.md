@@ -44,6 +44,7 @@
 
 iris %>% group_by_("Species") %>%
   summarise_all(.funs = c(Mean="mean", Sd="sd"))
+  https://www.rdocumentation.org/packages/dplyr/versions/0.5.0/topics/summarise_all
 
 ### * Set appropriate column names using measurement names (step 2)
 ### * Apply activity names (Step 3)
