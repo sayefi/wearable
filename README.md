@@ -41,6 +41,10 @@
 ### * Create a function which returns subjectId, activityId and mean of each measurement 
 ### * run lapply on splitted dataset with the above created function
 ### * Unlist the dataset using do.call and rbind
+
+iris %>% group_by_("Species") %>%
+  summarise_all(.funs = c(Mean="mean", Sd="sd"))
+
 ### * Set appropriate column names using measurement names (step 2)
 ### * Apply activity names (Step 3)
 ### * Write output to file - output2.txt
