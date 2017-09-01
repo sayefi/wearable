@@ -1,5 +1,10 @@
 
 
+fileUrl<-
+     "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+download.file(fileUrl,"input.zip","curl")
+
+unzip("input.zip")
 
 x_train<-read.table("UCI HAR Dataset/train/X_train.txt")
 y_train<-read.table("UCI HAR Dataset/train/y_train.txt")
@@ -149,6 +154,17 @@ levels(result$activityName)<-activities$name
 result
 
 dim(result)
+
+## ------------------------------------------------
+output
+
+library(dplyr)
+
+output<-group_by(output,subjectId,activityName)
+head(output,20)
+
+output<-summarise_all(output,mean)
+head(output,20)
 
 # res
 # 

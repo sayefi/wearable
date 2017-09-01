@@ -1,182 +1,102 @@
+# Getting and Cleaning Data Course Project
+### Prepared by: Sayef Ishaque
+
+## The assignment ask to process accelerometer data collected from wearable 
+##device (Samsung Galaxy S smartphone) for number of subjects (wearer) and activities. 
+
+## Data Processing script - run_analysis.R
+
+## Prerequisite
+### * Download the script run_analysis.R from GitHub
+### * Set the working directory and put the script in the working direcotry
+### * The script will download the input dataset from the link provided (if  
+### "UCI HAR Dataset" doesn't exists in working direcotry already)
+### The script assumes that "dplyr" package is installed
+
+library(dplyr)
+
+if(!dir.exists("UCI HAR Dataset")){
+     fileUrl<-
+          "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+     download.file(fileUrl,"input.zip","curl")
+     
+     unzip("input.zip")
+}
+
+## Important Input files
+### List of activities - "UCI HAR Dataset/activity_labels.txt"
+### Descriptive name of measurements - "UCI HAR Dataset/features.txt" 
+### Accelerometer data organized in two folders Test & Train -
+### * "UCI HAR Dataset/test/X_test.txt"
+### * "UCI HAR Dataset/train/X_train.txt"
+### Both data files have associated subject and activity file
+### * Subjects in Test -"UCI HAR Dataset/test/subject_test.txt" 
+### * Activity in Test -"UCI HAR Dataset/test/Y_test.txt" 
+### * Subjects in Train -"UCI HAR Dataset/train/subject_train.txt" 
+### * Activity in Train -"UCI HAR Dataset/train/y_train.txt" 
 
 
+
+### Step 1 - Merges the training and the test sets to create one data set.
+### * Read the dataset from file
+### * Merge the dataset using cbind() and rbind()
 
 x_train<-read.table("UCI HAR Dataset/train/X_train.txt")
 y_train<-read.table("UCI HAR Dataset/train/y_train.txt")
+subjects_train<-read.table("UCI HAR Dataset/train/subject_train.txt")
+
+trainData<-cbind(subjects_train,y_train,x_train)
 
 x_test<-read.table("UCI HAR Dataset/test/X_test.txt")
-y_test<-read.table("UCI HAR Dataset/test/y_test.txt")
+y_test<-read.table("UCI HAR Dataset/test/Y_test.txt")
+subjects_test<-read.table("UCI HAR Dataset/test/subject_test.txt")
 
-train_subjects<-read.table("UCI HAR Dataset/train/subject_train.txt")
-test_subjects<-read.table("UCI HAR Dataset/test/subject_test.txt")
-activities<-read.table("UCI HAR Dataset/activity_labels.txt")
+testData<-cbind(subjects_test,y_test,x_test)
 
-head(x_train,10)
+mergedData<-rbind(trainData,testData)
 
-str(x_train)
+### Step 2 - Extracts only the measurements on the mean and standard deviation for each measurement.
+### * Read name of measurements from file
+### * Apply the name of measurement as column names on merged dataset
+### * Extract a vector of mesurement names which has mean or std using grep function
+### * subset the merged dataset with measurement names
 
-rownames(x_train)
+measurements<-read.table("UCI HAR Dataset/features.txt", 
+                         stringsAsFactors = FALSE)
 
-str(y_train)
+colnames(mergedData)<-c("subjectId","activityId",measurements$V2)
 
-dim(x_train)
+impCols<-grep("Id$|mean|std",colnames(mergedData),value = TRUE)
 
-dim(y_train)
-
-dim(subjects)
-
-dim(activities)
-
-
-## ---------------------------------------------------------------
-## Load activity labels
-
-activities<-read.table("UCI HAR Dataset/activity_labels.txt",
-                       stringsAsFactors = FALSE)
-
-colnames(activities)<-c("id","name")
-
-# fActivities<-factor(levels=activities$id,labels = activities$name)
-# fActivities["WALKING"]
-
-# str(fActivities)
-# 
-# attributes(fActivities)
+mergedData<-mergedData[,impCols]
 
 
+### Step 3 - Uses descriptive activity names to name the activities in the data set
+### * Read name of activities from file
+### * Convert the activity column to factor and apply lebels of the factor from activity file
 
-## -------------------------------------------------------
-## Lebel activity lebels in training dataset as factor
+### Step 4 - Appropriately labels the data set with descriptive variable names
+### * As part of step 2, this is already accomplished (double check?)
+### * Create an output file output1.txt 
 
-y_train<-read.table("UCI HAR Dataset/train/y_train.txt")
+### Step 5 - Creates an independent tidy data set with the average of each variable for each activity and each subject
+### * Prepare raw dataset through Step 1(?)
+### * Create a new column in the dataset using manipulate() function by combining subjectId and activityId
+### * Split the dataset using the new column
+### * Create a function which returns subjectId, activityId and mean of each measurement 
+### * run lapply on splitted dataset with the above created function
+### * Unlist the dataset using do.call and rbind
 
-y_train$V1<-as.factor(y_train$V1)
+iris %>% group_by_("Species") %>%
+     summarise_all(.funs = c(Mean="mean", Sd="sd"))
+https://www.rdocumentation.org/packages/dplyr/versions/0.5.0/topics/summarise_all
 
-levels(y_train$V1)<-activities$name
+### * Set appropriate column names using measurement names (step 2)
+### * Apply activity names (Step 3)
+### * Write output to file - output2.txt
 
-colnames(y_train)<-c("activityName")
+## Output files
+### output1.txt - Mean and Standard deviation (only) for all observations (?x observations)
+### output2.txt - Mean of all veriables grouped by subject and activity (?x rows)
 
-y_train$activityName
-
-## ----------------------------------------------------------
-## Load features and x_train data 
-
-features<-read.table("UCI HAR Dataset/features.txt", stringsAsFactors = FALSE)
-
-x_train<-read.table("UCI HAR Dataset/train/X_train.txt")
-
-
-
-str(x_train)
-
-## ---------------------------------------------------------
-## Merge subject and activity with x_train
-## Assign appropriate column names
-train_subjects<-read.table("UCI HAR Dataset/train/subject_train.txt")
-train_subjects$V1<-as.factor(train_subjects$V1)
-colnames(train_subjects)<-c("subjectId")
-
-x_train<-cbind(train_subjects$subjectId,y_train$activityName,x_train)
-
-colnames(x_train)<-c("subjectId","activityName",features$V2)
-
-head(x_train)
-
-str(x_train)
-
-impMeasures<-grep("mean|std",names(x_train),value = TRUE)
-
-#impMeasures<-c("fBodyGyro-mean()-Y","fBodyBodyGyroJerkMag-kurtosis()")
-
-
-
-output<-x_train[,c("subjectId","activityName",impMeasures)]
-
-## step 5 on small data
-# output<-head(output, 200)
-
-names(output)
-
-head(output)
-
-str(output)
-
-library(plyr)
-
-dim(output)
-
-output<-mutate(output, key<-paste(output$subjectId,output$activityName,sep=" + "))
-
-
-colnames(output)[length(output)]<-"Key"
-output
-
-splittedSubnAct<-split(output,output$Key )
-
-splittedSubnAct
-
-splittedSubnAct[[1]][c(1,3)]
-
-impMeasures
-
-a<-colMeans(splittedSubnAct[[1]][,impMeasures])
-str(a)
-b<-as.vector(a)
-b
-c<-cbind("my row", "text",rbind(b))
-c[1,1:5]
-
-dim(splittedSubnAct)
-head(splittedSubnAct)
-splittedSubnAct[[1]][,3]
-
-colMeans(splittedSubnAct[[1]][,impMeasures])
-
-funMean<-function(x){
-     r<-as.vector(colMeans(x[,impMeasures]))
-     r<-cbind(x[1,1],x[1,2],rbind(r[1:length(r)]))
-}
-res<-lapply(splittedSubnAct,funMean)
-res
-
-result<-as.data.frame(do.call(rbind,res))
-
-colnames(result)<-c("subjectId","activityName",impMeasures)
-result$subjectId<-as.factor(result$subjectId)
-result$activityName<-as.factor(result$activityName)
-levels(result$activityName)<-activities$name
-
-result
-
-dim(result)
-
-# res
-# 
-# result<-unlist(res)
-# result
-# 
-# str(result)
-# 
-# do.call(rbind,res)
-# 
-# 
-# n<-length(result)
-# state<-as.vector(names(result[1:n]))
-# 
-# resultDf<-as.data.frame(cbind(hospital,state))
-# 
-# unlistedres<-unlist(res)
-# unlistedres
-# names(res)
-# r<-cbind(as.factor(res[1]))
-# r
-# str(res)
-# 
-# groupColumns = c("subjectId","activityName")
-# #dataColumns = c("hr", "rbi","sb")
-# res = ddply(output, groupColumns, function(x) colMeans(x[impMeasures]))
-# 
-# 
-# head(res)
-# 
-# colMeans()
+## End
