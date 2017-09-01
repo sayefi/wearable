@@ -8,14 +8,14 @@ This code book summarizes the resulting data fields in `output.txt`.
 
 1. subjectId   
 
-     - The ID of the subject on which the observation was taken
-     - Data type: Factor
-     - Indicates 1 of 30 subjects
+          - The ID of the subject on which the observation was taken
+          - Data type: Factor
+          - Indicates 1 of 30 subjects
                
 2. activityId  
 
-     - The type of activity performed when the corresponding measurements were taken
-     - Data type: Factor
+          - The type of activity performed when the corresponding measurements were taken
+          - Data type: Factor
                
                     WALKING (value 1): subject was walking during the test
                     WALKING_UPSTAIRS (value 2): subject was walking up a staircase during the test
@@ -26,7 +26,8 @@ This code book summarizes the resulting data fields in `output.txt`.
                     
 ## Measurements
 ### Note: The dataset contains one observation per subject per activity. Measurements are summarized as mean of measurements across multiple observations.
-               - Data type: Numeric
+              
+          - Data type: Numeric
 
 3. tBodyAccMeanX
 4. tBodyAccMeanY
