@@ -1,16 +1,14 @@
 # Getting and Cleaning Data Course Project
 ### Prepared by: Sayef Ishaque
 
-## The assignment ask to process accelerometer data collected from wearable 
-## device (Samsung Galaxy S smartphone) for number of subjects (wearer) and activities. 
+
 
 ## Data Processing script - run_analysis.R
 
 ## Instructions
 ### * Download the script run_analysis.R from GitHub
 ### * Set the working directory and put the script in the working direcotry
-### * The script will download the input dataset from the link provided (if  
-### "UCI HAR Dataset" doesn't exists in working direcotry already)
+### * The script will download the input dataset from the link provided 
 ### * The script assumes that "dplyr" package is installed
 ### * The output is generated in output.txt
 
