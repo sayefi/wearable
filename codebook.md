@@ -6,11 +6,12 @@ This code book summarizes the resulting data fields in `output.txt`.
 
 ## Identifiers
 
-* 1. subjectId      - The ID of the subject on which the observation was taken
-                    - Factor
-                    - Indicates 1 of 30 subjects
+1. subjectId    - The ID of the subject on which the observation was taken
+               - Factor
+               - Indicates 1 of 30 subjects
                
-* 2. activityId     - The type of activity performed when the corresponding measurements were taken
+2. activityId   - The type of activity performed when the corresponding measurements were taken
+                    
                     WALKING (value 1): subject was walking during the test
                     WALKING_UPSTAIRS (value 2): subject was walking up a staircase during the test
                     WALKING_DOWNSTAIRS (value 3): subject was walking down a staircase during the test
