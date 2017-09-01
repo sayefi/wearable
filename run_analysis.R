@@ -59,7 +59,7 @@ mergedData<-rbind(trainData,testData)
 ### * Read name of measurements from file
 ### * Apply the name of measurement as column names on merged dataset
 ### * Extract a vector of mesurement names which has mean or std using grep function
-### * subset the merged dataset with measurement names
+### * select appropriate variables with measurement names
 
 measurements<-read.table("UCI HAR Dataset/features.txt", 
                          stringsAsFactors = FALSE)
