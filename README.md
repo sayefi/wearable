@@ -10,7 +10,13 @@
 * The script assumes that `dplyr` package is installed
 * The output is generated in `output.txt`
 
-
+     * To download the repository, write the following command in git bash
+               $git clone https://github.com/sayefi/wearable.git
+               
+     * Open R console
+     * Go to 'wearable' directory and set it as current directory
+               $setwd(".")
+               $source('run_analysis.R', echo=TRUE)
 
 
 ## Important Input files

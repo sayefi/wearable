@@ -99,6 +99,8 @@ colnames(mergedData)<-impCols
 mergedData$subjectId<-as.factor(mergedData$subjectId)
 output<-mergedData%>%group_by(subjectId,activityId)%>%summarise_all(mean)
 
-write.table(output,"output.txt")
+
+write.table(output,"output.txt",row.name=FALSE)
+
 
 ## End
