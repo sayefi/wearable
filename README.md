@@ -4,11 +4,11 @@
 ## Data Processing script - `run_analysis.R`
 
 ## Instructions
-* Download the script run_analysis.R from GitHub
-* Set the working directory and put the script in the working direcotry
-* The script will download the input dataset from the link provided (if `UCI HAR Dataset` doesn`t exists in working direcotry already)
-* The script assumes that `dplyr` package is installed
-* The output is generated in `output.txt`
+    * Download the script run_analysis.R from GitHub
+    * Set the working directory and put the script in the working direcotry
+    * The script will download the input dataset from the link provided (if `UCI HAR Dataset` doesn`t exists in working direcotry already)
+    * The script assumes that `dplyr` package is installed
+    * The output is generated in `output.txt`
 
 
 
